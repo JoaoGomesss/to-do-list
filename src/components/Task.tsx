@@ -1,7 +1,7 @@
 import { FunctionComponent } from "react";
 import { useDispatch } from "react-redux";
 import { toggleTaskCompletion, deleteTask } from "../store";
-
+import { useNavigate } from "react-router-dom";
 import { CgClose, CgInfo } from "react-icons/cg";
 import "./Task.css";
 
@@ -15,6 +15,11 @@ interface TaskProps {
 
 const Task: FunctionComponent<TaskProps> = ({ task }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleTaskDetailsClick = () => {
+    navigate(`/${task.title}`);
+  };
 
   return (
     <div
@@ -34,7 +39,7 @@ const Task: FunctionComponent<TaskProps> = ({ task }) => {
         >
           <CgClose />
         </button>
-        <button className="info-task-button">
+        <button className="info-task-button" onClick={handleTaskDetailsClick}>
           <CgInfo />
         </button>
       </div>
