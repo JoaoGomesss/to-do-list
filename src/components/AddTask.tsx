@@ -1,34 +1,33 @@
-import { useState, FunctionComponent } from "react";
-import { useDispatch } from "react-redux";
-import { addTask } from "../store";
+import React, { useState } from "react";
 import "./AddTask.css";
 import Button from "./Button";
 
-const AddTask: FunctionComponent = () => {
-  const [inputValue, setInputValue] = useState("");
-  const dispatch = useDispatch();
+interface AddTaskProps {
+  handleTaskAddition: (taskTitle: string) => void;
+}
+
+const AddTask: React.FC<AddTaskProps> = ({ handleTaskAddition }) => {
+  const [inputData, setInputData] = useState("");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
+    setInputData(e.target.value);
   };
 
-  const handleAddTask = () => {
-    if (inputValue.trim()) {
-      dispatch(addTask(inputValue));
-      setInputValue("");
-    }
+  const handleAddTaskClick = () => {
+    handleTaskAddition(inputData);
+    setInputData("");
   };
 
   return (
     <div className="add-task-container">
       <input
-        className="add-task-input"
-        type="text"
-        value={inputValue}
         onChange={handleInputChange}
+        value={inputData}
+        type="text"
+        className="add-task-input"
       />
       <div className="add-task-button-container">
-        <Button onClick={handleAddTask}>Adicionar</Button>
+        <Button onClick={handleAddTaskClick}>Adicionar</Button>
       </div>
     </div>
   );

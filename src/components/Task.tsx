@@ -5,12 +5,16 @@ import { useNavigate } from "react-router-dom";
 import { CgClose, CgInfo } from "react-icons/cg";
 import "./Task.css";
 
+interface TaskT {
+  id: string;
+  title: string;
+  completed: boolean;
+}
+
 interface TaskProps {
-  task: {
-    id: string;
-    title: string;
-    completed: boolean;
-  };
+  task: TaskT;
+  handleTaskClick: (taskId: string) => void;
+  handleTaskDeletion: (taskId: string) => void;
 }
 
 const Task: FunctionComponent<TaskProps> = ({ task }) => {

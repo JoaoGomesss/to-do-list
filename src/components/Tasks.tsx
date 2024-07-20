@@ -1,17 +1,34 @@
-import { FunctionComponent } from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "../store";
+import React from "react";
 import Task from "./Task";
 
-const Tasks: FunctionComponent = () => {
-  const tasks = useSelector((state: RootState) => state.tasks.tasks);
+interface TaskT {
+  id: string;
+  title: string;
+  completed: boolean;
+}
 
+interface TasksProps {
+  tasks: TaskT[];
+  handleTaskClick: (taskId: string) => void;
+  handleTaskDeletion: (taskId: string) => void;
+}
+
+const Tasks: React.FC<TasksProps> = ({
+  tasks,
+  handleTaskClick,
+  handleTaskDeletion,
+}) => {
   return (
-    <>
+    <div>
       {tasks.map((task) => (
-        <Task key={task.id} task={task} />
+        <Task
+          key={task.id}
+          task={task}
+          handleTaskClick={handleTaskClick}
+          handleTaskDeletion={handleTaskDeletion}
+        />
       ))}
-    </>
+    </div>
   );
 };
 

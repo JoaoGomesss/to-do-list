@@ -1,5 +1,11 @@
-import { configureStore, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+  configureStore,
+  createSlice,
+  PayloadAction,
+  createAsyncThunk,
+} from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
+import axios from "axios";
 
 interface Task {
   id: string;
@@ -18,10 +24,20 @@ const initialState: TasksState = {
   ],
 };
 
+export const fetchTasks = createAsyncThunk("tasks/fetchTasks", async () => {
+  const { data } = await axios.get(
+    "https://jsonplaceholder.cypress.io/todos?_limit=10"
+  );
+  return data as Task[];
+});
+
 const tasksSlice = createSlice({
   name: "tasks",
   initialState,
   reducers: {
+    setTasks: (state, action: PayloadAction<Task[]>) => {
+      state.tasks = action.payload;
+    },
     toggleTaskCompletion: (state, action: PayloadAction<string>) => {
       const task = state.tasks.find((task) => task.id === action.payload);
       if (task) task.completed = !task.completed;
@@ -37,9 +53,15 @@ const tasksSlice = createSlice({
       state.tasks = state.tasks.filter((task) => task.id !== action.payload);
     },
   },
+  extraReducers: (builder) => {
+    builder.addCase(fetchTasks.fulfilled, (state, action) => {
+      state.tasks = action.payload;
+    });
+  },
 });
 
-export const { toggleTaskCompletion, addTask, deleteTask } = tasksSlice.actions;
+export const { setTasks, toggleTaskCompletion, addTask, deleteTask } =
+  tasksSlice.actions;
 
 const store = configureStore({
   reducer: {
