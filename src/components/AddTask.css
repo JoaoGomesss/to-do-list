@@ -19,3 +19,9 @@
   margin-left: 10px;
   flex: 1;
 }
+
+@media screen and (max-width: 768px) {
+  .add-task-input {
+    width: 50px;
+  }
+}
